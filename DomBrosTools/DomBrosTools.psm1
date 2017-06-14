@@ -10,6 +10,4 @@ foreach ($import in @($Public + $Private)) {
     }
 }
 
-Set-LogConfiguration
-
 Export-ModuleMember -Function $Public.Basename
