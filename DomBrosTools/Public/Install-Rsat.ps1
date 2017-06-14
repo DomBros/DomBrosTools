@@ -1,5 +1,4 @@
-﻿function Install-Rsat
-{
+﻿function Install-Rsat {
   <#
       .SYNOPSIS
       Downloads and installs RSAT (Windows Remote Server Admin tools).
@@ -23,20 +22,17 @@
 
   # Install RSAT on Server
   $OperatingSystem = Get-WmiObject -Class Win32_OperatingSystem
-  if($OperatingSystem.Name -like '*Windows Server*') 
-  {
+  if($OperatingSystem.Name -like '*Windows Server*') {
     Add-WindowsFeature RSAT -IncludeAllSubFeature
     break
   }
   
   # Check architecture
-  if($ENV:PROCESSOR_ARCHITECTURE -eq 'AMD64')
-  {
+  if($ENV:PROCESSOR_ARCHITECTURE -eq 'AMD64') {
     Write-Verbose -Message 'x64 Architecture'
     $Uri = 'https://download.microsoft.com/download/1/D/8/1D8B5022-5477-4B9A-8104-6A71FF9D98AB/WindowsTH-RSAT_WS2016-x64.msu'
   }
-  else
-  {
+  else{
     Write-Verbose -Message 'x86 Architecture'
     $Uri = 'https://download.microsoft.com/download/1/D/8/1D8B5022-5477-4B9A-8104-6A71FF9D98AB/WindowsTH-RSAT_WS2016-x86.msu'
   }
@@ -49,13 +45,11 @@
   Invoke-WebRequest -Uri $Uri -OutFile $PathDownload -UseBasicParsing
   
   $SignatureCheck = Get-AuthenticodeSignature -FilePath $PathDownload
-  if($SignatureCheck.Status -ne 'valid') 
-  {
+  if($SignatureCheck.Status -ne 'valid') {
     Write-Error -Message 'Download file error. Exiting...'    
     break
   }
-  else
-  {
+  else {
     Write-Verbose -Message 'File signature correct.'
   }
   
@@ -63,13 +57,11 @@
   $WusaArguments = $PathDownload + ' /quiet'
   $WusaBin = "$env:windir\System32\wusa.exe"
     
-  if( (Test-Path -Path $PathDownload) -and (Test-Path -Path $WusaBin) )
-  {
+  if( (Test-Path -Path $PathDownload) -and (Test-Path -Path $WusaBin) ) {
     'Installing RSAT - please wait'
     Start-Process -FilePath $WusaBin -ArgumentList $WusaArguments -Verb RunAs -Wait -PassThru
   }
-  else
-  {
+  else {
     Write-Error -Message "Missing $PathDownload or $WusaBin"
   }
 }
