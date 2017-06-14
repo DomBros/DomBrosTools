@@ -24,7 +24,7 @@ Describe 'Module Information' -Tags 'Command'{
             $Script:Manifest.RootModule | Should Be "$ModuleName.psm1"
         }
         It 'Valid Manifest GUID' {
-            $Script:Manifest.Guid | SHould be '1113dd72-2347-4128-980f-ca9adf89971d'
+            $Script:Manifest.Guid | SHould be 'de95a79b-62f6-41b3-a5d1-065e6505693b'
         }
         It 'Required Modules' {
             $Script:Manifest.RequiredModules | Should BeNullOrEmpty
